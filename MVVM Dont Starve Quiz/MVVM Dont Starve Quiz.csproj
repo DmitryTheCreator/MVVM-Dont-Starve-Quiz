@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>MVVM_Dont_Starve_Quiz</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>MVVM Dont Starve Quiz</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Background.jpg" />
+    <None Remove="Images\Restart.png" />
+    <None Remove="Images\tbBackground.jpg" />
+    <None Remove="Images\Volume.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Background.jpg" />
+    <Resource Include="Images\Restart.png" />
+    <Resource Include="Images\Volume.png" />
+  </ItemGroup>
+
+</Project>

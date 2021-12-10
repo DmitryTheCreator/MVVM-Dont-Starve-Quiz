@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "MVVM Dont Starve Quiz/1.0.0": {
+        "runtime": {
+          "MVVM Dont Starve Quiz.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MVVM Dont Starve Quiz/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
