@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace MVVM_Dont_Starve_Quiz.Models
 {
@@ -18,8 +15,7 @@ namespace MVVM_Dont_Starve_Quiz.Models
 
     public class Goal : Term
     {
-        //private string _picture;
-        //public string Picture { get => _picture; set => _picture = "{ StaticResourse " + value + "}"; }
+        public string Description { get; set; }
         public string Picture { get; set; }
     }
     public class Answer

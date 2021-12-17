@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace MVVM_Dont_Starve_Quiz.ViewModels
 {
-    class ApplicationViewModel : INotifyPropertyChanged
+    public class ApplicationViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<Term> Terms;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -21,7 +21,8 @@ namespace MVVM_Dont_Starve_Quiz.ViewModels
             set
             {
                 _currentTerm = value;
-                OnPropertyChanged(nameof(CurrentTerm));
+                IsGoal = value is Goal;
+                OnPropertyChanged();
             }
         }
 
@@ -33,27 +34,24 @@ namespace MVVM_Dont_Starve_Quiz.ViewModels
             {
                 _selectedTerm = value;
                 CurrentTerm = SetCurrentTem(value.Id);
-                OnPropertyChanged(nameof(SelectedTerm));
+                OnPropertyChanged();
             }
         }
 
-        public ApplicationViewModel()
+        private bool _isGoal;
+        public bool IsGoal
         {
-            Terms = new ObservableCollection<Term>
+            get => _isGoal;
+            set
             {
-                new Factor { Id = 0, Question = "Данный персонаж кто?", Answers = new ObservableCollection<Answer>
-                    { new Answer { Text = "Я", Id = 1 }, new Answer { Text = "Ты", Id = 2 },  new Answer { Text = "Никто", Id = 3 } } },
-                new Factor { Id = 1, Question = "Что умеет?", Answers = new ObservableCollection<Answer>
-                    { new Answer { Text = "Есть", Id = 4 }, new Answer { Text = "Пить", Id = 5 } } },
-                new Factor { Id = 2, Question = "Что ест?", Answers = new ObservableCollection<Answer>
-                    { new Answer { Text = "Пиво", Id = 6 }, new Answer { Text = "Сухарики", Id = 7 } } },
-                new Factor { Id = 3, Question = "Красивый?", Answers = new ObservableCollection<Answer>
-                    { new Answer { Text = "Да", Id = 8 }, new Answer { Text = "Нет", Id = 9 } } },
-                new Factor { Id = 4, Question = "Тильтозавр?", Answers = new ObservableCollection<Answer>
-                    { new Answer { Text = "По утрам", Id = 10 }, new Answer { Text = "С похмелья", Id = 11 } } },
-                new Goal { Id = 5, Question = "Ответ" }
-            };
-            CurrentTerm = SetCurrentTem(0);
+                _isGoal = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Term StartTerm
+        {
+            get => SetCurrentTem(0);
         }
 
         private Term SetCurrentTem(uint id)
@@ -62,6 +60,405 @@ namespace MVVM_Dont_Starve_Quiz.ViewModels
                 if (term.Id == id)
                     return term;
             return null;
+        }
+
+        public ApplicationViewModel()
+        {
+            string tab = "        ";
+            Terms = new ObservableCollection<Term>
+            {
+                new Factor { Id = 0, Question = "Добро пожаловать в экспертную систему Don't Starve! С чего начнем?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Персонажи", Id = 1 }, new Answer { Text = "Боссы", Id = 43 },  new Answer { Text = "Монстры", Id = 60 } } },
+                new Factor { Id = 1, Question = "Данный персонаж мужчина или женщина?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мужчина", Id = 2 }, new Answer { Text = "Женщина", Id = 25 }, new Answer { Text = "Не совсем...", Id = 40 } } },
+                new Factor { Id = 2, Question = "Данный персонаж вообще человек?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Куда уж человечнее?", Id = 3 }, new Answer { Text = "Ты какой-то странный...", Id = 20 } } },
+                new Factor { Id = 3, Question = "Данный персонаж ученый?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Смею предположить, что это так", Id = 4 }, new Answer { Text = "Уга-Буга?", Id = 7 } } },
+                new Factor { Id = 4, Question = "Данный персонаж - первый, кто попадает в руки игрока?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Да", Id = 5 }, new Answer { Text = "Если бы...", Id = 6 } } },
+                new Goal { Id = 5, Question = "Уилсон", Description = tab + "Уилсон (Wilson) — первый доступный персонаж в игре. " +
+                "Бесстрашный учёный-аристократ, пойманный демоном и перенесён в таинственный дикий мир, в котором он должен выжить и, " +
+                "самое главное, не голодать. Уилсон отращивает бороду, которая защищает его от холода и при сбривании даёт волосы. " +
+                "Его голос — труба с сурдиной.", Picture = "/Pictures/Characters/Wilson.png" },
+                new Goal { Id = 6, Question = "Вагстафф", Description = tab + "Вагстафф (Wagstaff) — персонаж, добавленный в одной из бета-версий " +
+                "вместе с Уилер. Обладает уникальной вкладкой \"Конструирование\". Страдает от близорукости и не может чётко видеть без очков. " +
+                "Теряет здоровье, когда ест сырую еду. Его голос - паровой свисток.", Picture = "/Pictures/Characters/Wagstaff.png" },
+                new Factor { Id = 7, Question = "Данный персонаж силен физически?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Махаться будешь со мной?", Id = 8 }, new Answer { Text = "Только не по лицу...", Id = 11 } } },
+                new Factor { Id = 8, Question = "Что нужно для счастья?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Еды, да побольше!", Id = 9 }, new Answer { Text = "Жену и топор под бок! А, это одно и то же...", Id = 10 } } },
+                new Goal { Id = 9, Question = "Вольфганг", Description = tab + "Вольфганг (Wolfgang) — второй разблокируемый персонаж. Силач. " +
+                "При достижении сытости более 225 единиц становится больше и сильнее. А достигнув сытости 100 становится слабым и худым.Тем не менее, " +
+                "он пуглив, поэтому темнота и монстры быстрее снижают его рассудок. Его голос — туба.", Picture = "/Pictures/Characters/Wolfgang.png" },
+                new Goal { Id = 10, Question = "Вуди", Description = tab + "Вуди (Woodie) — шестой разблокируемый персонаж. Дровосек. Быстрее остальных " +
+                "рубит деревья, носит с собой говорящий и бесконечный по прочности топор Люси. В полнолуние или при рубке большого количества деревьев " +
+                "превращается в гигантского бобра (или же лося / гуся в DST), который ломает всё, что угодно, но не подбирает предметы (лось - сильно бьёт, " +
+                "а гусь - быстро бегает). Голос Вуди звучит как виолончель, а голос Люси — как кларнет.", Picture = "/Pictures/Characters/Woodie.png" },
+                new Factor { Id = 11, Question = "А не тот ли это гад, который нас сюда отправил?!", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Это он! Хватай его!", Id = 12 }, new Answer { Text = "Извините, обознался", Id = 13 } } },
+                new Goal { Id = 12, Question = "Максвелл", Description = tab + "Максвелл (Maxwell) — демон, который запер вас в этом мире. Его можно " +
+                "разблокировать как игрового персонажа, если пройти режим приключения. Постоянно восстанавливает себе часть рассудка, т.к. лучше знает мир. " +
+                "Начинает игру с тёмным мечом, бронёй ночи, топливом ужаса и аметистом. При появлении в мире получает кодекс Умбра, с помощью которого может " +
+                "призывать своих теневых двойников. Очень хрупок. Его голос похож на фисгармонию.", Picture = "/Pictures/Characters/Maxwell.png" },
+                new Factor { Id = 13, Question = "*Персонаж пытается общаться при помощи жестов*", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Чего ты руками машешь, клоун?", Id = 14 }, new Answer { Text = "*Выказать молчаливое одобрение*", Id = 19 } } },
+                new Factor { Id = 14, Question = "Ты боишься темноты?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Агась...", Id = 15 }, new Answer { Text = "Нет. Но пчелы.. Пчелы пугают меня", Id = 18 } } },
+                new Factor { Id = 15, Question = "Что предпочитает данный персонаж?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Дайте людам Рому!", Id = 16 }, new Answer { Text = "Изысканных деликатесов. Но чтобы не повторялись!", Id = 17 } } },
+                new Goal { Id = 16, Question = "Вудлегс", Description = tab + "Вудлегс (Woodlegs) — персонаж, добавленный в Don't Starve: Shipwrecked. " +
+                "Пират. Начинает игру со счастливой шляпой,четырьмя досками и пушкой. Может создавать пиратскую лодку \"Поступь моряка\". На суше у него " +
+                "падает рассудок. Его голос — концертина.", Picture = "/Pictures/Characters/Woodlegs.png" },
+                new Goal { Id = 17, Question = "Варли", Description = tab + "Варли (Warly) — персонаж, добавленный в Don't Starve: Shipwrecked. Кулинар. " +
+                "Не любит сырую и приготовленную на огне пищу, но блюда из казана добавляют ему больше сытости, здоровья и рассудка, чем у других. Гурман. " +
+                "Если есть одно и то же блюдо, то с каждым разом оно будет прибавлять всё меньше характеристик. Начинает игру с переносным казаном и сумкой " +
+                "шеф-повара. Также был добавлен в Don't Starve Together. Его голос — стальной барабан.", Picture = "/Pictures/Characters/Warly.png" },
+                new Goal { Id = 18, Question = "Уолтер", Description = tab + "Уолтер (Walter) — бесплатный персонаж. Пионер, попавший в Постоянство через " +
+                "радио Вуди. Вооружившись рогаткой и натянув свою шляпу, он отправляется в путешествие в компании со своим новым другом. Не боится ничего, " +
+                "кроме получения урона. Его голос похож на рожок.", Picture = "/Pictures/Characters/Walter.png" },
+                new Goal { Id = 19, Question = "Вэс", Description = tab + "Вэс (Wes) — мим, поэтому выражает все фразы жестами. Вам кажется, что Don't Starve " +
+                "слишком лёгкий? Тогда поиграйте за Вэса! Он очень хрупок! Имеет в запасе воздушные шарики.", Picture = "/Pictures/Characters/Wes.png" },
+                new Factor { Id = 20, Question = "Данный персонаж раньше был человеком?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я всегда таким был и горжусь этим!", Id = 21 }, new Answer { Text = "Ты же знаешь, что снимет проклятье...?", Id = 24 } } },
+                new Factor { Id = 21, Question = "Данный персонаж король?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я люблю своих подданных. И бананы", Id = 22 }, new Answer { Text = "Я люблю только души", Id = 23 } } },
+                new Goal { Id = 22, Question = "Уилбур", Description = tab + "Уилбур (Wilbur) — персонаж, добавленный в Don't Starve: Shipwrecked. Король обезьян. " +
+                "Не разговаривает (как и Вэс), может быстро бегать на четырех лапах. Все ближайшие обезьяны приносят своему королю дары. Его голос — маримба.",
+                Picture = "/Pictures/Characters/Wilbur.png" },
+                new Goal { Id = 23, Question = "Вортокс", Description = tab + "Вортокс (Wortox) — платный персонаж. Будучи игривым чертёнком с ярким прошлым, " +
+                "Вортокс когда-то был нежным (хотя и негодяйским) лесным существом без заботы в мире — до того дня, когда он унаследовал ужасное проклятие и " +
+                "потерял близкого друга. Собирает души из умерших существ, которые может использовать для поедания (за счёт потери рассудка), телепортации на " +
+                "короткие дистанции и лечения ближайших союзников. Еда восстанавливает всего 50% параметров. Слабее теряет рассудок от монстров. " +
+                "Его голос — скрипка.", Picture = "/Pictures/Characters/Wortox.png" },
+                new Goal { Id = 24, Question = "Веббер", Description = tab + "Веббер (Webber) — персонаж, добавленный в DLC Reign of Giants. Выглядит как паук - " +
+                "гуманоид, хотя он на самом деле ребёнок, живущий внутри паука , который когда-то пытался съесть его. Третий персонаж, который не может быть " +
+                "разблокирован с помощью опыта, наряду с Вэсом, Максвеллом, Уилбуром, Вудлегсом и Уилбой. Его рассудок ниже, чем у большинства других персонажей, " +
+                "но больше здоровья и сытости. Пауки нейтральны к нему, но существа, враждебные к монстрам, враждебны и к Вебберу. Может отращивать паутинную бороду. " +
+                "Его голос звучит как расстроенная бас-гитара.", Picture = "/Pictures/Characters/Webber.png" },
+                new Factor { Id = 25, Question = "Данный персонаж вообще человек?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Куда уж человечнее?", Id = 26 }, new Answer { Text = "Ты какой-то странный...", Id = 37 } } },
+                new Factor { Id = 26, Question = "Что для данного персонажа значит огонь?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Опасность", Id = 27 }, new Answer { Text = "Образ жизни", Id = 36 } } },
+                new Factor { Id = 27, Question = "У данного персонажа есть братья или сестры?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Есть. И с ними лучше не встречаться...", Id = 28 }, new Answer { Text = "Нет, и слава Богу", Id = 31 } } },
+                new Factor { Id = 28, Question = "Кем является ваш родственник?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Призрак, который меня оберегает", Id = 29 }, new Answer { Text = "Сама тьма", Id = 30 } } },
+                new Goal { Id = 29, Question = "Венди", Description = tab + "Венди (Wendy) — третий разблокируемый персонаж. У Венди есть особенный цветок, " +
+                 "с помощью которого она может призвать свою призрачную сестру Абигейл. Призрак будет помогать довольно слабой Венди в бою. У Венди крепкие нервы, " +
+                 "поэтому темнота и монстры меньше снижают ее рассудок. Голос Венди — альтовая флейта.", Picture = "/Pictures/Characters/Wendy.png" },
+                new Goal { Id = 30, Question = "Винона", Description = tab + "Винона (Winona) — персонаж, добавленный эксклюзивно для Don't Starve Together. " +
+                "Мастерица, сестра Чарли — это позволяет ей увернуться от первого удара Чарли, не получив урона. Начинает игру с верной лентой. Строит конструкции " +
+                "немного быстрее других персонажей. К сожалению, строя что-либо теряет сытость. Её голос — тубулум.", Picture = "/Pictures/Characters/Winona.png" },
+                new Factor { Id = 31, Question = "Данный персонаж спит хотя бы иногда?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Конечно, куда без этого", Id = 32 }, new Answer { Text = "Нет времени спать, столько книг еще не прочитано...", Id = 35 } } },
+                new Factor { Id = 32, Question = "Чего боится данный персонаж?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Своего будущего", Id = 33 }, new Answer { Text = "Отсутствия мяса и драки", Id = 34 } } },
+                new Goal { Id = 33, Question = "Ванда", Description = tab + "Ванда (Wanda) — платный персонаж. Женщина, которая боится своего будущего, и всеми " +
+                "силами пытается его избежать. Может управлять временем и пространством Постоянства с помощью своих часов. Её голос — звук курантов напольных часов.", 
+                Picture = "/Pictures/Characters/Wanda.png" },
+                new Goal { Id = 34, Question = "Вигфрид", Description = tab + "Вигфрид (Wigfrid) — персонаж, добавленный в DLC Reign of Giants. Выглядит как рыжая " +
+                "валькирия, хотя на самом деле она просто чрезмерно вжившаяся в эту роль актриса. Начинает игру с собственным копьём, шлемом и четырьмя кусками мяса. " +
+                "Может есть только мясо и мясные блюда . Когда Вигфрид убивает врага , она получает 25% урона от атаки противника в качестве здоровья и рассудка. " +
+                "Наносит на 25% больше урона и получает на 25% меньше урона. Её голос звучит как сильно обработанный звук латунного рога.", 
+                Picture = "/Pictures/Characters/Wigfrid.png" },
+                new Goal { Id = 35, Question = "Уикерботтом", Description = tab + "Уикерботтом (Wickerbottom) — пятый разблокируемый персонаж. Библиотекарша. Она " +
+                "изначально знает рецепты научной машины, а с её помощью может делать предметы, доступные для алхимической машины. Может создавать книги. Страдает " +
+                "бессонницей. Получает больший, чем у других персонажей, штраф к характеристикам от поедания несвежей еды. Её голос звучит как гобой.",
+                Picture = "/Pictures/Characters/Wickerbottom.png" },
+                new Goal { Id = 36, Question = "Уиллоу", Description = tab + "Уиллоу (Willow) — первый открываемый персонаж и первая девушка в игре. Пироманка. " +
+                "Не получает урона от огня и повышает рассудок, когда находится рядом с ним. С самого начала игры носит зажигалку. Её голос — флейта.",
+                Picture = "/Pictures/Characters/Willow.png" },
+                new Factor { Id = 37, Question = "Данный персонаж вегитарианец?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Ем все, что попадет в руки. Даже с пола", Id = 38 }, new Answer { Text = "Предпочитаю не есть то, что недавно бегало на " +
+                    "своих двоих", Id = 39 } } },
+                new Goal { Id = 38, Question = "Уилба", Description = tab + "Уилба (Wilba) — персонаж, добавленный в Don't Starve: Hamlet. Дочь королевы свиней. " +
+                "Свиньи-стражники не атакуют её за кражу и срывание травы или цветов с ферм, а обычные свиньи иногда подходят к принцессе и дарят ей брёвна, хрюнты " +
+                "и прочие вещи. Может есть несвежие продукты без штрафа к здоровью и сытости (как WX-78). В полнолуние, свинопокалипсис и если переела мяса монстра, " +
+                "превращается в Уилбу-оборотня (чего можно избежать, нося серебряное ожерелье). Её голос — окарина.", Picture = "/Pictures/Characters/Wilba.png" },
+                new Goal { Id = 39, Question = "Вурт", Description = tab + "Вурт (Wurt) — платный персонаж. Она любопытный молодой мэрм, пытающаяся расширить свои " +
+                "горизонты... до тех пор, пока эти горизонты не распространяются на территорию свиней. Может создавать деревню мэрмов на болотном дёрне. Вегетарианка. " +
+                "Голос Вурт — сочетание пилообразного тона и звука полоскания горла.", Picture = "/Pictures/Characters/Wurt.png" },
+                new Factor { Id = 40, Question = "Это овощ или ведро с гайками?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Гринпису бы понравилось", Id = 41 }, new Answer { Text = "Автоваз в восторге!", Id = 42 } } },
+                new Goal { Id = 41, Question = "Вормвуд", Description = tab + "Вормвуд (Wormwood) — персонаж, добавленный в Don't Starve: Hamlet. Разумное растение. " +
+                "Может сажать семена в землю без грядок. Порча (срубание, выкапывание, сожжение) других растений отнимает у Вормвуда рассудок. На третий сезон " +
+                "расцветает, быстрее передвигается и теряет сытость. Имеет иммунитет к аллергии в сезон цветения. Имеет свою особую вкладку. Также был добавлен в " +
+                "Don't Starve Together. Его голос — диджериду.", Picture = "/Pictures/Characters/Wormwood.png" },
+                new Goal { Id = 42, Question = "WX-78", Description = tab + "WX-78 — четвёртый разблокируемый персонаж в игре. WX-78 может съесть несвежие и " +
+                "испорченные продукты без вреда здоровью и штрафа к сытости (но получает штрафы от гнили). Может есть шестерёнки для повышения характеристик. " +
+                "Получает урон под дождём и искрится. Если в него ударит молния (в том числе от Посоха телелокации), он мгновенно восстановит здоровье и ускорится, " +
+                "но потеряет часть рассудка. Его голос похож на синтезатор.", Picture = "/Pictures/Characters/WX-78.png" },
+                new Factor { Id = 43, Question = "Данный босс умеет призывать соратников?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Армия, в атаку!", Id = 44 }, new Answer { Text = "Я тут и один разберусь!", Id = 47 } } },
+                new Factor { Id = 44, Question = "Данный босс - паук или пчела?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Паутинка, моя паутинка...", Id = 45 }, new Answer { Text = "Меееед...", Id = 46 } } },
+                new Goal { Id = 45, Question = "Королева пауков", Description = tab + "Королева пауков (Spider Queen) — монстр-босс. Королева пауков появляется " +
+                "из кокона третьего уровня, если игрок находится неподалеку. Королева порождает пауков и пауков-воинов каждые 20 секунд (в Don't Starve Together — " +
+                "каждые 10 секунд, а также может призывать пауков-лекарей). Максимальное число пауков в «свите» — шестнадцать.", 
+                Picture = "/Pictures/Bosses/Spider Queen.png" },
+                new Goal { Id = 46, Question = "Пчелиная матка", Description = tab + "Пчелиная матка (Bee Queen) — босс, добавленный в Don't Starve Together. " +
+                "Появляется из огромного улья, после ударов молотом по улью впредь до того момента, когда на нём не осталось подтёков мёда. Оставляет за собой след " +
+                "из мёда, который замедляет персонажа. Также этот след появляется при атаке.", Picture = "/Pictures/Bosses/Bee Queen.png" },
+                new Factor { Id = 47, Question = "Данный босс является \"гигантом\"?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я большой и страшный!", Id = 48 }, new Answer { Text = "...Не смотри на меня сверху вниз", Id = 53 } } },
+                new Factor { Id = 48, Question = "Данный босс откладывает яйца?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "...Лучше не подходи к гнезду", Id = 49 }, new Answer { Text = "Обойдешься без омлета", Id = 50 } } },
+                new Goal { Id = 49, Question = "Лось/Гусь", Description = tab + "Лось, также известный как Гусь (в английской версии Moose и Goose соответственно) — " +
+                "весенний босс-гигант DLC: Reign of Giants. Появляется в начале весны после первой фразы персонажа. Через несколько дней рядом с ним ударит молния, " +
+                "после чего на этом месте образуется яйцо. Если разбить яйцо молотом (при каждом ударе персонаж будет получать разряд тока), из него вылупятся лусята. " +
+                "Лось может прийти даже тогда, когда персонаж находится в пещерах, и отложить яйцо.", Picture = "/Pictures/Bosses/Moose_Goose.png" },
+                new Factor { Id = 50, Question = "Данный босс умеет управлять огнем?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Смотри, я дракон!", Id = 51 }, new Answer { Text = "Лучше нет оружия, чем собственные лапы", Id = 52 } } },
+                new Goal { Id = 51, Question = "Драконья муха", Description = tab + "Драконья муха (Dragonfly) — один из самых сложных боссов-гигантов в DLC Reign " +
+                "of Giants. Когда муха появляется, она начинает искать предметы, которые могут сгореть. Найдя такой предмет, муха выплевывает рядом с ним лаву, после " +
+                "предмет сгорает, а муха съедает оставшийся пепел. При съедании большого количества пепла засыпает на полдня.", 
+                Picture = "/Pictures/Bosses/DragonFly.png" },
+                new Goal { Id = 52, Question = "Медведь-барсук", Description = tab + "Медведь-барсук (Bearger) — осенний босс-гигант, добавленный в DLC Reign Of " +
+                "Giants. Когда он приходит, то начинает поедать всё вокруг и выбрасывать вещи из всех сундуков и холодильников. Всю выброшенную еду медведь будет " +
+                "съедать, что даёт игроку время на атаку, пока он занят поеданием запасов. Приоритетом для него является мёд: он разрушает ульи и поедает его. После " +
+                "съедания 10 единиц мёда засыпает.", Picture = "/Pictures/Bosses/Bearger.png" },
+                new Factor { Id = 53, Question = "Данное существо обитает на суше или в воде?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мне нужна твердая земля под ногами", Id = 54 }, new Answer { Text = "Буль-Буль", Id = 57 } } },
+                new Factor { Id = 54, Question = "Данный босс зациклен на защите или разрушении?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Не трогай деревья!", Id = 55 }, new Answer { Text = "Я приду к тебе на базу \"прибраться\"...", Id = 56 } } },             
+                new Goal { Id = 55, Question = "Энт", Description = tab + "Энт (Tree Guard) — один из боссов в игре. Каждое срубленное игроком или существом дерево " +
+                "даёт 1,3% шанс появления энта из дерева неподалёку при стандартных настройках, который будет атаковать убийцу деревьев. Энт может появиться даже из " +
+                "дерева, которое посадил персонаж. Не может появиться раньше определённого дня, который зависит от выбранных настроек. При обычных настройках может " +
+                "появиться только начиная с 3-го дня.", Picture = "/Pictures/Bosses/Tree guard.png" },
+                new Goal { Id = 56, Question = "Циклоп-олень", Description = tab + "Циклоп-олень (Deerclops) — босс, который с вероятностью в 67% при стандартных " +
+                "настройках приходит в конце зимы. В Don't Starve Together нет никакого шанса прихода этого босса, но есть таймер, по которому циклоп и навещает " +
+                "игрока. В первую зиму босс приходит в ночь с 30 на 31 день. Если он разрушит некоторое количество построек, то удовлетворит свой \"голод\" " +
+                "разрушения и через некоторое время исчезнет. Также он уйдёт сам после наступления весны.", Picture = "/Pictures/Bosses/Deerclops.png" },
+                new Factor { Id = 57, Question = "Даннaый босс акула или... нечто иное?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Смотрели \"челюсти\"?", Id = 58 }, new Answer { Text = "Вызывайте Крякена!", Id = 59 } } },
+                new Goal { Id = 58, Question = "Тигровая акула", Description = tab + "Тигровая акула (Tiger Shark) — босс, добавленный в Don't Starve: " +
+                "Shipwrecked в обновлении Eye of the Tiger Shark. Внешне напоминает нечто среднее между тигром и акулой. Может переходить из воды на сушу " +
+                "в зависимости от положения игрока. Как на суше, так и в воде использует два типа атаки: укус и прыжок на голову игрока с нанесением урона по " +
+                "площади. При атаке на воде после укуса создает пять больших волн, направленных в сторону игрока, после прыжка – восемь, направленных в разные " +
+                "стороны.", Picture = "/Pictures/Bosses/Tiger Shark.png" },
+                new Goal { Id = 59, Question = "Крякен", Description = tab + "Крякен (Quacken) — босс, который был добавлен в DLC Shipwrecked. Представляет собой " +
+                "голову, которую защищает множество расположенных вокруг щупалец. Голова не может атаковать в ближнем бою и имеет 1000 здоровья, и именно ей " +
+                "необходимо наносить урон, чтобы убить Крякена. Щупальца убивать не обязательно, они имеют свой отдельный запас здоровья, который значительно скромнее" +
+                " — всего по 90 каждое. Помимо этого, Крякен плюётся тройным залпом чернил, которые наносят 50 урона по области в момент попадания и на 70% замедляют " +
+                "лодку, если она через них проплывает.", Picture = "/Pictures/Bosses/Quacken.png" },
+                new Factor { Id = 60, Question = "Данный монстр биологического происхождения?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Ага, из плоти и крови", Id = 61 }, new Answer { Text = "Ну, я бы не был так уверен", Id = 84 } } },
+                new Factor { Id = 61, Question = "Данный монстр имеет подвиды?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Нас таких много, и все мы разные!", Id = 62 }, new Answer { Text = "Я Волк-одиночка. Только не волк", Id = 79 } } },
+                new Factor { Id = 62, Question = "Данный монстр имеет 4 или 8 лап?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мне и 4 хватит, чтобы тебя догнать", Id = 63 }, new Answer { Text = "Лапок много не бывает", Id = 68 } } },
+                new Factor { Id = 63, Question = "Данный монстр обычный?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я не такой, как все", Id = 64 }, new Answer { Text = "Пусть и обычный, но все равно навалять могу", Id = 67 } } },
+                new Factor { Id = 64, Question = "Данное существо обитает на суше или в воде?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Данный монстр - огненный или ледяной?", Id = 65 }, new Answer { Text = "Лед - моя стихия!", Id = 66 } } },
+                new Goal { Id = 65, Question = "Красная гончая", Description = tab + "Красная гончая (Red Hound) появляется летом и осенью и участвует в набегах " +
+                "на персонажа. Отличается от обычных гончих характерным красным окрасом шерсти. Обладает меньшим здоровьем, имеет полный иммунитет к огню, а " +
+                "также медленнее замораживается ледяным посохом. После смерти на месте гибели красной гончей образуется огонь, который с лёгкостью может " +
+                "перекинуться на другие объекты, находящиеся неподалёку, в связи с чем рекомендуется сражаться с красными гончими подальше от важных горючих ресурсов " +
+                "и структур.", Picture = "/Pictures/Monsters/Red Hound.png" },
+                new Goal { Id = 66, Question = "Синяя гончая", Description = tab + "Синяя гончая (Blue Hound) появляется зимой и весной вместо красной гончей. Была " +
+                "добавлена в обновлении A Winter's Tale. Отличается от обычных гончих характерным синим окрасом шерсти. В DLC Reign of Giants после убийства тело синей " +
+                "гончей взрывается, замораживая персонажей и существ неподалёку на 1 фазу (персонаж полностью замораживается на 2 фазе). Так же, как и красная гончая, " +
+                "оставляет после смерти мясо монстра и 2 клыка.", Picture = "/Pictures/Monsters/Blue Hound.png" },
+                new Goal { Id = 67, Question = "Гончая", Description = tab + "Гончая (Hound) — агрессивное существо. Нападают стаями (по две и более особи), ночью могут " +
+                "уснуть (просыпаются утром, как и другие способные на сон существа). Также можно усыпить флейтой Пана. Нападения происходят примерно каждые 3-12 дней. " +
+                "Зимой нападения становятся чаще. Перед появлением гончих будет слышно рычание, и персонаж будет сообщать, что он что-то слышит. С гончих выпадают мясо " +
+                "монстра и клыки, которые можно потратить на создание клыкастых ловушек.", Picture = "/Pictures/Monsters/Hound.png" },
+                new Factor { Id = 68, Question = "Где обитает данный монстр?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Любая равнина - мой дом", Id = 69 }, new Answer { Text = "Мне подошли бы пещеры", Id = 74 },
+                    new Answer { Text = "Предпочитаю руины", Id = 77 }, new Answer { Text = "Тропики вполне сойдут", Id = 78 }} },
+                new Factor { Id = 69, Question = "Данный монстр обычный?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я не такой, как все", Id = 70 }, new Answer { Text = "Пусть и обычный, но все равно навалять могу", Id = 73 } } },
+                new Factor { Id = 70, Question = "На чем специализируется данный монстр?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "На боях", Id = 71 }, new Answer { Text = "На лечении", Id = 72 } } },
+                new Goal { Id = 71, Question = "Паук-воин", Description = tab + "Паук-воин (Spider Warrior) — усиленная версия паука. Его легко отличить от обычного по " +
+                "жёлтому окрасу. Живут они в коконах 2-ого и 3-го уровня (каждый третий паук — воин). Их также может призвать королева пауков. Пауки-воины, в отличие от " +
+                "обычных пауков, не выходят из гнёзд по вечерам — они появляются только если кокон был атакован или подожжён.", Picture = "/Pictures/Monsters/Spider Warrior.png" },
+                new Goal { Id = 72, Question = "Паук-лекарь", Description = tab + "Паук-лекарь (Nurse Spider) — агрессивный монстр, питающийся всеми видами мяса. " +
+                "Призывается королевой пауков и способен лечить других пауков вокруг раз в 8 секунд в радиусе двух клеток дёрна, восстанавливая им 150 единиц здоровья " +
+                "(8 единиц Вебберу). Существует только в Don't Starve Together. Имеет 22,5% шанс на появление вместо паука-воина или обычного паука, когда королева пауков " +
+                "призывает новых пауков.", Picture = "/Pictures/Monsters/Nurse Spider.png" },
+                new Goal { Id = 73, Question = "Паук", Description = tab + "Паук (Spider) — агрессивный монстр. Питается всеми видами мяса.Пауки днём спят и выходят из " +
+                "своих гнёзд с наступлением сумерек, а также когда персонаж наступил на паутину, атаковал кокон или если он горит. Если гнездо разрушено, пауки будут " +
+                "бродить по округе и спать на земле. Наибольшую опасность пауки представляют ночью, так как сражение в темноте затруднено, а пауки предпочитают " +
+                "передвигаться стаями. Если был атакован один паук, то ближайшие пауки с криками нападут на персонажа. Тем не менее они довольно медленно передвигаются, " +
+                "поэтому от них легко убежать.", Picture = "/Pictures/Monsters/Spider.png" },
+                new Factor { Id = 74, Question = "Данный монстр имеет панцирь?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "У меня своя однушка в центре", Id = 75 }, new Answer { Text = "Мне и на свежем воздухе неплохо", Id = 76 } } },
+                new Goal { Id = 75, Question = "Пещерный паук", Description = tab + "Пещерный паук (Cave Spider) — обитающая в пещерах разновидность паука. У него один " +
+                "большой красный глаз, огромная пасть и похожий на раковину панцирь, образующий его \"голову\", в который паук может прятаться, защищаясь от урона. " +
+                "Пещерные пауки, как и плевуны, появляются из спилагмитов.", Picture = "/Pictures/Monsters/Cave Spider.png" },
+                new Goal { Id = 76, Question = "Плевун", Description = tab + "Плевун (Spitter) — обитающая в пещерах разновидность паука, которая наравне с обычными " +
+                "атаками способна к атакам дистанционным. Они появляются из паучьих сталагмитов, как и пещерные пауки.", Picture = "/Pictures/Monsters/Spitter.png" },
+                new Goal { Id = 77, Question = "Глубинный паук", Description = tab + "Глубинный паук (Dangling Depth Dweller) — обитающая в руинах разновидность паука. " +
+                 "Они свисают с потолка и нападают на игрока, когда он проходит по паутине на полу, которая отмечается на карте. Могут прыгать, подобно паукам-воинам, " +
+                 "и обладают аналогичными параметрами.", Picture = "/Pictures/Monsters/Dangling Depth Dweller.png" },
+                new Goal { Id = 78, Question = "Обезьян-паук", Description = tab + "Обезьян-паук (Spider Monkey) — монстр, добавленный в Don't Starve: Hamlet. Появляется " +
+                "в тропических лесах. Являясь агрессивным существом, он будет атаковать почти всех.Обезьян-пауки не помогают друг другу в бою, однако следует проявлять " +
+                "осторожность и не стоять слишком близко к ним, так как они будут атаковать персонажа в любом случае.", Picture = "/Pictures/Monsters/Spider Monkey.png" },
+                new Factor { Id = 79, Question = "Данный монстр обитает на лунном острове?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Да", Id = 80 }, new Answer { Text = "Нет", Id = 83 } } },
+                new Factor { Id = 80, Question = "Данный монстр птица или призрак?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Бу-у-у-у", Id = 81 }, new Answer { Text = "Ну, не знаю... Кря?", Id = 82 } } },
+                new Goal { Id = 81, Question = "Гештальт", Description = tab + "Гештальт (Gestalt) — существо, добавленное в Don't Starve Together. Обычные гештальты " +
+                "встречаются на лунном острове. Гештальты становятся видны, если у персонажа больше 25% просветления, и начинают его атаковать при уровне просветления " +
+                "более 85%. Если персонаж с высоким уровнем просветления приблизится к гештальту, тот свернётся в небольшой шар и выстрелит в направлении персонажа. " +
+                "Попадания можно избежать, вовремя отбежав с пути шара. Атаки гештальтов не наносят урона, вместо этого они поднимают показатель просветления на 10 " +
+                "единиц и замедляют персонажа.", Picture = "/Pictures/Monsters/Gestalt.png" },
+                new Goal { Id = 82, Question = "Лунная пинчайка", Description = tab + "Лунная пинчайка (The Moonrock Pengull) — враждебное существо, добавленное в " +
+                "Don't Starve Together. Обитает на лунном острове. Появляется зимой, когда персонаж гуляет возле океана. Ведут себя как пинчайки, но, в отличие от " +
+                "них, нападают при приближении. Не несут яиц.", Picture = "/Pictures/Monsters/The Moonrock Pengull.png" },
+                new Goal { Id = 83, Question = "Древняя стороженожка", Description = tab + "Древняя стороженожка (Ancient Sentrypede) — враждебное существо, " +
+                "добавленное в Don't Starve Together. Появляется в древнем архиве после активации древнего переключателя, когда её оболочка поглотит энергию, " +
+                "полученную от древнего сторожевого поста.", Picture = "/Pictures/Monsters/Ancient Sentrypede.png" },
+                new Factor { Id = 84, Question = "Данный монстр имеет подвиды?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Нас таких много, и все мы разные!", Id = 85 }, new Answer { Text = "Я Волк-одиночка. Только не волк", Id = 117 } } },
+                new Factor { Id = 85, Question = "Данный монстр из потустороннего мира или механизм?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Бу-у-у-у-у-у", Id = 86 }, new Answer { Text = "Пип-Пип-Чип-Дип", Id = 108 } } },
+                new Factor { Id = 86, Question = "Данный монстр - обычный дух или кое-кто по-злее?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я прибыл с того света", Id = 87 }, new Answer { Text = "Я твой ночной кошмар", Id = 92 } } },
+                new Factor { Id = 87, Question = "Данный монстр обычный?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я не такой, как все", Id = 88 }, new Answer { Text = "Пусть и обычный, но все равно навалять могу", Id = 89 } } },
+                new Goal { Id = 88, Question = "Призрак пирата", Description = tab + "Призрак пирата (Pirate Ghost) — монстр, добавленный в DLC Shipwrecked. " +
+                "Появляется при уничтожении затонувших суден с шансом 50% или при вылавливании морских могил с шансом 10%. Внешне напоминает Вудлегса. Медленно " +
+                "следует за игроком и при приближении наносит урон лодке игрока. Вблизи сильно уменьшает рассудок. Не может сойти на берег. Но если персонаж " +
+                "находится на суше и вплотную подойдет к призраку, то призрак станет агрессивным и начнет атаковать.", Picture = "/Pictures/Monsters/Pirate Ghost.png" },
+                new Factor { Id = 89, Question = "Это дух человека или свиньи?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Человек", Id = 90 }, new Answer { Text = "Свинья", Id = 91 } } },
+                new Goal { Id = 90, Question = "Призрак", Description = tab + "Призрак (Ghost) — агрессивный монстр, который появляется при раскопке могил с " +
+                "вероятностью 10%. В отличие от остальных монстров, урон от призрака наносится не от удара, а от присутствия. Очень медлителен, так что от него " +
+                "можно легко убежать. Испаряется через некоторое время, если игрок убежит от него слишком далеко.", Picture = "/Pictures/Monsters/Ghost.png" },
+                new Goal { Id = 91, Question = "Древний дух", Description = tab + "Древний дух (Ancient Spirit) — существо, добавленное в Don't Starve: Hamlet. " +
+                "Является аналогом призрака из оригинальной игры. Древний дух появляется, когда персонаж ломает некоторые свиные статуи или грабит руины. Их также " +
+                "может призвать древний вестник.", Picture = "/Pictures/Monsters/Ancient Spirit.png" },
+                new Factor { Id = 92, Question = "Вы любите шахматы?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "С детства за Гарри Каспарова!", Id = 93 }, new Answer { Text = "Мат - это же коврик такой, для спорта, да?", Id = 104 } } },
+                new Factor { Id = 93, Question = "Данный монстр агрессивен?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Кусну за бочок - будешь знать!", Id = 94 }, new Answer { Text = "Я делаю больно иначе...", Id = 99 } } },
+                new Factor { Id = 94, Question = "Данное существо обитает на суше или в воде?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мне нужна твердая земля под ногами", Id = 95 }, new Answer { Text = "Буль-Буль", Id = 98 } } },
+                new Factor { Id = 95, Question = "Данный монстр \"толстый\" или \"тонкий\"?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я люблю покушать, да...", Id = 96 }, new Answer { Text = "Я хоть и тонкий, но поесть тоже люблю", Id = 97 } } },
+                new Goal { Id = 96, Question = "Ползучий ужас", Description = tab + "Ползучий ужас (Crawling Horror) — ужас. Большое и лохматое существо, " +
+                "похожее на отъевшуюся тлю с множеством конечностей. Ползучий ужас появляется при рассудке ниже половины. Он бродит по окрестностям и " +
+                "наблюдает за игроком. В этом состоянии он не высасывает рассудок, не нападает и убегает от игрока.", 
+                Picture = "/Pictures/Monsters/Crawling Horror.png" },
+                new Goal { Id = 97, Question = "Страхоклюв", Description = tab + "Страхоклюв (Terrorbeak, также Клювастый, Клюв Ужаса) — ужас, появляющийся " +
+                "при низком рассудке (ниже 15%). Очень редко может появиться в нейтральной форме.У него большой клюв, маленькое тело и небольшие ноги. " +
+                "Является куда более грозным противником, чем ползучий: его высокая скорость перемещения и атаки не позволят расслабиться. Как и в случае " +
+                "с ползучим ужасом, нахождение рядом со страхоклювом сводит персонажа с ума. Так как он появляется только при рассудке ниже 15%, вы не " +
+                "сможете атаковать его, оставаясь при этом в здравом уме", Picture = "/Pictures/Monsters/Terrorbeak.png" },
+                new Goal { Id = 98, Question = "Плавающий ужас", Description = tab + "Плавающий ужас (Swimming Horror) — морской вариант ужаса, " +
+                "добавленный в дополнении Shipwrecked для замены обычных земных ужасов. Начинает преследовать игрока, если тот подплывёт слишком " +
+                "близко. Телепортируется в случайную точку после получения урона. При атаке отнимает 20 единиц прочности лодки.Если слезть с " +
+                "плавательного судна, водные ужасы исчезнут, а земные тут же появятся и наоборот.", Picture = "/Pictures/Monsters/Swimming Horror.png" },
+                new Factor { Id = 99, Question = "Данный монстр появляется у костра?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мне и так хорошо", Id = 100 }, new Answer { Text = "Эх, погреться бы", Id = 101 } } },
+                new Goal { Id = 100, Question = "Мистер Скиттс", Description = tab + "Мистер Скиттс (Mr. Skitts) — маленькое змееподобное создание, " +
+                "которое наблюдает за персонажем с расстояния. Если приблизиться, он уползёт. Мистер Скитс безобиден, и убить его нельзя. Если " +
+                "понизить/повысить рассудок, чтобы пройти через обелиск, то в момент, когда обелиск исчезнет/появится, оттуда вылетит/туда вселится " +
+                "теневое существо, очень похожее на Мистера Скитса.", Picture = "/Pictures/Monsters/Mr. Skitts.png" },
+                new Factor { Id = 101, Question = "Данный монстр может потушить костер?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Я просто смотрю", Id = 102 }, new Answer { Text = "Мне больно видеть яркий свет...", Id = 103 } } },
+                new Goal { Id = 102, Question = "Теневой наблюдатель", Description = tab + "Теневой наблюдатель (Shadow Watcher) — длинная тень, " +
+                "которая появляется у источников света при уровне рассудка персонажа ниже 65%. На голове у тени много торчащих в разные стороны " +
+                "волос. Этот ужас не опасен, и его нельзя атаковать. Тень не исчезнет, если к ней подойти. Часто появляется в головоломках о " +
+                "Уильяме Картере.", Picture = "/Pictures/Monsters/Shadow Watcher.png" },
+                new Goal { Id = 103, Question = "Руки ночи", Description = tab + "Руки ночи — вероятно, руки ночного монстра, полностью которого " +
+                "увидеть нельзя. Руки появляются из тени. Они (максимум может появиться две руки) не атакуют игрока, но пытаются потушить костёр. " +
+                "Если рука затушила костёр, она исчезает. Если игрок наступит на них, отступают, но снижают рассудок. Если отогнать руку достаточно " +
+                "далеко, исчезают со звуком лопающейся струны. О появлении рук сигнализирует мелодия музыкальной шкатулки. Начинают периодически " +
+                "появляться, когда рассудок опускается до 75%. И чем ниже, тем чаще руки будут появляться.", Picture = "/Pictures/Monsters/Night hand.png" },
+                new Factor { Id = 104, Question = "Данный монстр является аналогом шахматной фигуры. Как он ходит?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Буковой \"Г\"", Id = 105 }, new Answer { Text = "По диагонали", Id = 106 },
+                    new Answer { Text = "По горизонтали и вертикали", Id = 107 } } },
+                new Goal { Id = 105, Question = "Теневой конь", Description = tab + "Теневые шахматы (Shadow Pieces) — создания, добавленные в " +
+                "обновлении Arts and Crafts в серии обновлений A New Reign для DST. Теневая ладья, в отличие от механической, не уничтожает " +
+                "структуры. Вместо тарана в сторону противника телепортируется ему под ноги и старается атаковать вблизи.", 
+                Picture = "/Pictures/Monsters/Shadow Knight.png" },
+                new Goal { Id = 106, Question = "Теневой слон", Description = tab + "Теневые шахматы (Shadow Pieces) — создания, добавленные в " +
+                "обновлении Arts and Crafts в серии обновлений A New Reign для DST. Вместо электрического разряда теневой слон умеет превращаться " +
+                "в стаю летучих мышей, от которых персонаж получает урон, пока находится в их радиусе, подобно споровому облаку жабы-поганки.", 
+                Picture = "/Pictures/Monsters/Shadow Bishop.png" },
+                new Goal { Id = 107, Question = "Теневая ладья", Description = tab + "Теневые шахматы (Shadow Pieces) — создания, добавленные в " +
+                "обновлении Arts and Crafts в серии обновлений A New Reign для DST. Теневой конь — единственная теневая фигура, которая похожа " +
+                "по поведению на своего механического сородича.", Picture = "/Pictures/Monsters/Shadow Rook.png" },
+                new Factor { Id = 108, Question = "Данный монстр поврежден?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Со мной все в порядке!", Id = 109 }, new Answer { Text = "ПАМАГИТИ", Id = 113 } } },
+                new Factor { Id = 109, Question = "Данный монстр является аналогом шахматной фигуры. Как он ходит?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Буковой \"Г\"", Id = 110 }, new Answer { Text = "По диагонали", Id = 111 },
+                    new Answer { Text = "По горизонтали и вертикали", Id = 112 } } },
+                new Goal { Id = 110, Question = "Механический конь", Description = tab + "Механический конь (Clockwork Knight) — монстр. Механические кони " +
+                "представляют собой шахматных коней, \"стратегически расставленных для максимума боли\".Их основной целью является защита деревянной " +
+                "платформы.", Picture = "/Pictures/Monsters/Clockwork Knight.png" },
+                new Goal { Id = 111, Question = "Механический слон", Description = tab + "Механический слон (Clockwork Bishop) — монстр, добавленный в " +
+                "обновлении \"Doorway to Adventure\". Представляет собой механического шахматного слона, созданного Максвеллом. Его основное назначение " +
+                "— охрана портала Максвелла в шахматном биоме.", Picture = "/Pictures/Monsters/Clockwork Bishop.png" },
+                new Goal { Id = 112, Question = "Механическая ладья", Description = tab + "Механическая ладья (Clockwork Castle или Rook) — монстр, " +
+                "который был добавлен в обновлении \"Жаждущие твоего голода\". Ладья — это третий, наиболее редкий шахматный монстр. Как и прочие " +
+                "фигуры, её можно найти в шахматном биоме рядом с основанием портала Максвелла.", Picture = "/Pictures/Monsters/Clockwork Castle.png" },
+                new Factor { Id = 113, Question = "Данный монстр является аналогом шахматной фигуры. Как он ходит?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Буковой \"Г\"", Id = 114 }, new Answer { Text = "По диагонали", Id = 115 },
+                    new Answer { Text = "По горизонтали и вертикали", Id = 116 } } },
+                new Goal { Id = 114, Question = "Повреждённый конь", Description = tab + "Повреждённый конь (Damaged Knight) — шахматный монстр, обитающий " +
+                "в руинах. Представляет из себя полуразбитую версию обычного механического коня. Поведение: стоит неподвижно, но если к нему подойти, " +
+                "начнёт атаковать игрока.", Picture = "/Pictures/Monsters/Damaged Knight.png" },
+                new Goal { Id = 115, Question = "Повреждённый слон", Description = tab + "Повреждённый слон (Damaged Bishop) — шахматный монстр, " +
+                "обитающий в руинах. Представляет из себя полуразбитую версию обычного механического слона с таким же поведением: неподвижно стоит, " +
+                "пока к нему не подойти, после чего начинает стрелять электрическими зарядами.", Picture = "/Pictures/Monsters/Damaged Bishop.png" },
+                new Goal { Id = 116, Question = "Повреждённая ладья", Description = tab + "Повреждённая ладья (Damaged Rook) — шахматный монстр, обитающий " +
+                "в руинах. Представляет из себя полуразбитую версию обычной механической ладьи с таким же поведением: неподвижно стоит, пока к ней не " +
+                "подойти, после чего начинает пытаться протаранить игрока. Также может наносить урон другим существам и разрушаемым объектам. Может " +
+                "полностью разрушить древнюю псевдонаучную станцию, что может привести к огромному количеству монстров и молний.", 
+                Picture = "/Pictures/Monsters/Damaged Rook.png" },
+                new Factor { Id = 117, Question = "Данное существо обитает на суше или в воде?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мне нужна твердая земля под ногами", Id = 118 }, new Answer { Text = "Буль-Буль", Id = 127 } } },
+                new Factor { Id = 118, Question = "Данный монстр умеет летать?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Агась!", Id = 119 }, new Answer { Text = "Моё место - земля", Id = 122 } } },
+                new Factor { Id = 119, Question = "Данный монстр пьет кровь?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Мистер Дракула, я Ваш большой фанат!", Id = 120 }, new Answer { Text = "Обойдусь как-нибудь", Id = 121 } } },
+                new Goal { Id = 120, Question = "Мышелиск", Description = tab + "Мышелиск (Batilisk) — летающее создание, которое живёт в пещерах и " +
+                "может вылетать на поверхность из открытой воронки в сумерках. Они наносят немного урона и имеют мало здоровья, достаточно двух ударов " +
+                "копья, чтобы убить их. После смерти с них могут выпасть крыло мышелиска, мясо монстра и гуано. Впрочем, может не упасть ничего. Также " +
+                "мышелиски периодически оставляют за собой гуано, пока движутся (подобно бифало, оставляющим навоз). Также из их крыльев можно сделать " +
+                "мышиную биту — магическое оружие.", Picture = "/Pictures/Monsters/Batilisk.png" },
+                new Goal { Id = 121, Question = "Трутень", Description = tab + "Трутень (Grumble Bee) — агрессивное существо, добавленное в дополнении " +
+                "A New Reign для Don't Starve Together. Призывается пчелиной маткой в бою с персонажем. Появляются в количестве 4 (5 в начале каждой " +
+                "из фаз пчелиной матки) штук и атакуют цель матки.", Picture = "/Pictures/Monsters/Grumble Bee.png" },
+                new Factor { Id = 122, Question = "Для появления данного монстра необходимо определенное условие?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Ты совершал шалости в этом году?", Id = 123 }, new Answer { Text = "Просто не подходи ко мне...", Id = 124 } } },
+                new Goal { Id = 123, Question = "Крампус", Description = tab + "Крампус (Krampus) — это демон, который приходит украсть вещи персонажа " +
+                "за то, что игрок убивает слишком много невинных животных (кролики, птицы и т.д.), т.е. совершает шалости.", 
+                Picture = "/Pictures/Monsters/Krampus.png" },
+                new Factor { Id = 124, Question = "Данынй монстр умеет призывать соратников?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Ты зашел не в тот район!", Id = 125 }, new Answer { Text = "Хоть я и одинок, но я не слаб.", Id = 126 } } },
+                new Goal { Id = 125, Question = "Варг", Description = tab + "Варг (Varg) — монстр, добавленный в DLC Reign of Giants. Встречается " +
+                "в RoG и DST. Может появиться вместо коалослона при исследовании подозрительных кучек грязи. В начале игры шанс нахождения " +
+                "варга равен 5%, но постепенно увеличивается, останавливаясь к сотому дню на 33% (в DST 2,5-16,5%). Варг привносит интригу — " +
+                "нельзя быть уверенным, что на конце следов персонажа ждет именно коалослон.", Picture = "/Pictures/Monsters/Varg.png" },
+                new Goal { Id = 126, Question = "Глубинный червь", Description = tab + "Глубинный червь (Depth Worm) — агрессивный монстр, " +
+                "который появился в обновлении \"Six Feet Under\". Обитает в руинах и пещерах, в основном перемещаясь под землёй. Имеет на " +
+                "голове отросток в виде растения, который он периодически выставляет в качестве приманки.", 
+                Picture = "/Pictures/Monsters/Depth Worm.png" },
+                new Factor { Id = 127, Question = "Этот монстр - акула или пиранья?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Смотрели \"челюсти\"?", Id = 128 }, new Answer { Text = "Я маленький и злой!", Id = 131 } } },              
+                new Factor { Id = 128, Question = "Данный монстр состоит из камня?", Answers = new ObservableCollection<Answer>
+                    { new Answer { Text = "Да", Id = 129 }, new Answer { Text = "Нет", Id = 130 } } },
+                new Goal { Id = 129, Question = "Каменная челюсть", Description = tab + "Каменная челюсть (Rockjaw) — враждебное существо " +
+                "в Don't Starve Together. Появляется около косяков океанической рыбы с шансом в 7,5% каждые 8-10 дней. Регенерирует " +
+                "здоровье, подобно бифало. Может появиться только если в радиусе 100 юнитов находится не более одного нарвала.", 
+                Picture = "/Pictures/Monsters/Rockjaw.png" },
+                new Goal { Id = 130, Question = "Морская гончая", Description = tab + "Морская гончая (Sea Hound) — враждебный монстр, " +
+                "добавленный в дополнении Don't Starve: Shipwrecked. Представляет собой красную хищную рыбку с негабаритно-большим " +
+                "спинным плавником. В обновлении Home Sea Home набеги морских (и обычных) гончих были заменены набегами крокопсов, но " +
+                "изредка к преследующей персонажа по воде стае крокопсов присоединяются две-три морские гончие. Также гончие могут " +
+                "быть привлечены упавшим в океан мясом разных видов.", Picture = "/Pictures/Monsters/Sea Hound.png" },
+                new Goal { Id = 131, Question = "Кромсатель печенья", Description = tab + "Кромсатель печенья (Cookie Cutter) — " +
+                "существо, добавленное в Don't Starve Together. Можно встретить в океане возле соляных образований в " +
+                "количестве до 7 штук.", Picture = "/Pictures/Monsters/Cookie Cutter.png" },
+            };
+            CurrentTerm = SetCurrentTem(0);
         }
     }
 }

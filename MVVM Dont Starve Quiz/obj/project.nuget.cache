@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "9yi39+7kMCE1yr0tJ0cT2uPwH7FhfPFF/tp6z+kYTv1Zl9zL6CiggO3CAU2BDG3xUBdWvMR2pc7EH/5cxyMc/A==",
+  "dgSpecHash": "c5UfT1zZJotO7xU/YJGvMBpTRSGhC6c1sTxDBFfczAqvaWhqPO9/Yiw1RXVQh5teriRJ28596qwC3gOxkCDj/g==",
   "success": true,
   "projectFilePath": "D:\\Study\\3 курс\\1 полугодие\\Инженерия Знаний\\ЛР\\ЛР3\\MVVM Dont'Starve Quiz\\MVVM Dont Starve Quiz\\MVVM Dont Starve Quiz.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\zamor\\.nuget\\packages\\apache.nms\\1.8.0\\apache.nms.1.8.0.nupkg.sha512",
+    "C:\\Users\\zamor\\.nuget\\packages\\apache.nms.activemq\\1.8.0\\apache.nms.activemq.1.8.0.nupkg.sha512",
+    "C:\\Users\\zamor\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
+    "C:\\Users\\zamor\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
+    "C:\\Users\\zamor\\.nuget\\packages\\system.runtime\\4.3.1\\system.runtime.4.3.1.nupkg.sha512"
+  ],
   "logs": []
 }
